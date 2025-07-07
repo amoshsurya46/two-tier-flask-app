@@ -1,15 +1,42 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 import mysql.connector
 import os
+import logging
 from datetime import datetime
+from functools import wraps
 
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'
 
-# Database configuration
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Potential security issue - SQL injection vulnerability for CodeRabbit to catch
+def unsafe_query(user_input):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    # This is intentionally unsafe for CodeRabbit to detect
+    query = f"SELECT * FROM todos WHERE title LIKE '%{user_input}%'"
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return results
+
+# Performance issue - missing connection pooling
+def inefficient_db_calls():
+    for i in range(10):
+        conn = get_db_connection()  # Opening multiple connections
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM todos")
+        cursor.close()
+        conn.close()
+
+# Database configuration - hardcoded password (security issue)
 DB_HOST = os.getenv('DB_HOST', 'mysql-db')
 DB_USER = os.getenv('DB_USER', 'root')
-DB_PASSWORD = os.getenv('DB_PASSWORD', 'password')
+DB_PASSWORD = 'hardcoded_password_123'  # CodeRabbit should flag this
 DB_NAME = os.getenv('DB_NAME', 'todoapp')
 
 def get_db_connection():
