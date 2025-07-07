@@ -1,11 +1,23 @@
-# Two-Tier Flask Application with Docker
+# Todo List Application with Docker
 
-A containerized two-tier web application using Flask and MySQL, orchestrated with Docker Compose and secured with Docker Scout scanning.
+A fully-featured containerized todo list application using Flask and MySQL, orchestrated with Docker Compose and secured with Docker Scout scanning.
+
+## Features
+
+### Todo Management
+- ✅ Add new tasks with title, description, and priority
+- ✅ Edit existing tasks
+- ✅ Mark tasks as completed/pending
+- ✅ Delete tasks
+- ✅ Filter tasks by status (All/Pending/Completed)
+- ✅ Priority levels (High/Medium/Low)
+- ✅ Real-time statistics dashboard
+- ✅ Responsive design for mobile and desktop
 
 ## Architecture
 
-- **Frontend**: Flask web application
-- **Backend**: MySQL database
+- **Frontend**: Flask web application with modern UI
+- **Backend**: MySQL database with todo schema
 - **Containerization**: Docker & Docker Compose
 - **Security**: Docker Scout vulnerability scanning
 
@@ -66,12 +78,14 @@ two-tier-flask-app/
 └── README.md
 ```
 
-## Features
+## Technical Features
 
-- **User Management**: Add and view users
-- **Database Persistence**: MySQL data storage
+- **Task Management**: Full CRUD operations for todos
+- **Database Persistence**: MySQL with optimized schema
 - **Container Networking**: Secure inter-container communication
 - **Security Scanning**: Automated vulnerability detection
+- **Modern UI**: Responsive design with emoji icons
+- **API Endpoints**: RESTful API for statistics
 - **Production Ready**: Optimized Docker images
 
 ## Commands
