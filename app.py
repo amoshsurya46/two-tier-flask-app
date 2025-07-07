@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'
+app.secret_key = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
 
 # Database configuration
 DB_HOST = os.getenv('DB_HOST', 'mysql-db')
@@ -132,14 +132,16 @@ def get_stats():
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    cursor.execute("SELECT COUNT(*) FROM todos")
-    total = cursor.fetchone()[0]
-    
-    cursor.execute("SELECT COUNT(*) FROM todos WHERE status = 'completed'")
-    completed = cursor.fetchone()[0]
-    
-    cursor.execute("SELECT COUNT(*) FROM todos WHERE status = 'pending'")
-    pending = cursor.fetchone()[0]
+    # Optimize with single query instead of multiple queries
+    cursor.execute("""
+        SELECT 
+            COUNT(*) as total,
+            SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
+            SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending
+        FROM todos
+    """)
+    result = cursor.fetchone()
+    total, completed, pending = result
     
     cursor.close()
     conn.close()
